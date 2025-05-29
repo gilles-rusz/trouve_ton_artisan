@@ -8,7 +8,6 @@ module.exports = (sequelize, DataTypes) => {
     nom: {
       type: DataTypes.STRING(191),
       allowNull: false,
-      unique: true,
     },
   }, {
     tableName: 'categories',

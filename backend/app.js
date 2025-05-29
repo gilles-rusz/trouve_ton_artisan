@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -21,12 +22,10 @@ console.log('artisanRoutes:', artisanRoutes);
 console.log('categorieRoutes:', categorieRoutes);
 console.log('specialiteRoutes:', specialiteRoutes);
 
-app.use(rateLimiter()); // ton middleware perso
+app.use(rateLimiter()); // middleware perso
 app.use(helmet());
 app.use(cors());
 
-// Limiter le nombre de requêtes par IP (express-rate-limit)
-// Tu peux choisir d'enlever soit celui-ci soit rateLimiter() pour éviter doublon
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100,
@@ -46,15 +45,18 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'Test OK' });
 });
 
-// routes
+// routes API
 app.use('/api/artisans', artisanRoutes);
 app.use('/api/specialites', specialiteRoutes);
 app.use('/api', contactRoutes);
 app.use('/api/categories', categorieRoutes);
 
-// 404 erreur
-app.use((req, res) => {
-  res.status(404).json({ message: 'Route non trouvée' });
+// Serve les fichiers statiques du build React
+app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
+
+// Toutes les routes non gérées par l'API renvoient index.html (React Router)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
 });
 
 // Fonction principale pour démarrer le serveur
@@ -62,11 +64,12 @@ async function startServer() {
   try {
     await sequelize.sync();
     const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => console.log(`✅ Serveur en écoute sur le port ${PORT}`));
+    app.listen(PORT, () => console.log(` Serveur en écoute sur le port ${PORT}`));
   } catch (error) {
-    console.error('❌ Erreur lors de la synchronisation avec la base :', error);
+    console.error(' Erreur lors de la synchronisation avec la base :', error);
     process.exit(1);
   }
 }
 
 startServer();
+
