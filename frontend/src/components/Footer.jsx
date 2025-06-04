@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-8 mt-12">
+    <footer style={{ backgroundColor: '#0074c7' }} className="text-white p-4">
+
       <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Menu des pages légales */}
         <div>
           <h2 className="text-lg font-semibold mb-2">Informations légales</h2>
           <ul className="space-y-1 text-sm">
@@ -31,7 +31,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Adresse de l'antenne */}
+    
         <div>
           <h2 className="text-lg font-semibold mb-2">Antenne régionale</h2>
           <address className="not-italic text-sm leading-relaxed">
@@ -43,11 +43,11 @@ const Footer = () => {
           </address>
         </div>
 
-        {/* Logo ou nom du site */}
+    
         <div className="flex flex-col items-start md:items-end">
           <img
-            src="/logo.svg"
-            alt="Logo Trouve ton artisan"
+            src=""
+            alt="Trouve ton artisan"
             className="h-10 mb-2"
           />
           <p className="text-sm text-gray-400">&copy; 2025 Trouve ton artisan</p>
