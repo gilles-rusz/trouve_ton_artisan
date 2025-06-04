@@ -5,12 +5,12 @@ const { body, validationResult } = require('express-validator');
 
 console.log('Route catégorie chargée');
 
-// Validation middleware
+
 const categorieValidationRules = [
   body('nom').trim().notEmpty().withMessage('Le nom est obligatoire'),
 ];
 
-// Middleware gestion erreurs validation
+
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -19,7 +19,7 @@ const validate = (req, res, next) => {
   next();
 };
 
-// GET toutes les catégories avec spécialités
+
 router.get('/', async (req, res) => {
   try {
     const categories = await Categorie.findAll({
@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET catégorie par ID
+
 router.get('/:id', async (req, res) => {
   try {
     const categorie = await Categorie.findByPk(req.params.id, {
@@ -47,11 +47,11 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST création catégorie avec validation
+
 router.post('/', categorieValidationRules, validate, async (req, res) => {
   try {
     const { nom } = req.body;
-    // Vérification doublon nom
+    
     const exist = await Categorie.findOne({ where: { nom } });
     if (exist) return res.status(400).json({ message: 'Cette catégorie existe déjà' });
 
@@ -63,14 +63,14 @@ router.post('/', categorieValidationRules, validate, async (req, res) => {
   }
 });
 
-// PUT modification catégorie avec validation
+
 router.put('/:id', categorieValidationRules, validate, async (req, res) => {
   try {
     const { nom } = req.body;
     const categorie = await Categorie.findByPk(req.params.id);
     if (!categorie) return res.status(404).json({ message: 'Catégorie non trouvée' });
 
-    // Vérifier si nouveau nom existe déjà sur une autre catégorie
+    
     const exist = await Categorie.findOne({ where: { nom, id: { [Categorie.sequelize.Op.ne]: req.params.id } } });
     if (exist) return res.status(400).json({ message: 'Cette catégorie existe déjà' });
 
@@ -84,7 +84,7 @@ router.put('/:id', categorieValidationRules, validate, async (req, res) => {
   }
 });
 
-// DELETE catégorie
+
 router.delete('/:id', async (req, res) => {
   try {
     const categorie = await Categorie.findByPk(req.params.id);

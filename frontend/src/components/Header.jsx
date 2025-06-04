@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const Header = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
 
-  // Ajouter un slug en minuscules et sans accents
+  
   const categories = [
     { id: 1, name: "Alimentation", slug: "alimentation" },
     { id: 2, name: "Bâtiment", slug: "batiment" },

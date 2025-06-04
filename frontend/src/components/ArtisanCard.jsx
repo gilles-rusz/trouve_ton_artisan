@@ -15,7 +15,7 @@ const ArtisanCard = ({ artisan }) => {
         
         <div className="h-32 bg-gray-100 rounded-lg flex items-center justify-center mb-3">
           <img
-            src={"../Logo.png"}
+            src={"../artisan-default.png"}
             alt={artisan.nom}
             className="h-full object-contain"
           />

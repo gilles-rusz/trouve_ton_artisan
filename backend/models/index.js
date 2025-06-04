@@ -12,14 +12,14 @@ const Categorie = require('./categorie')(sequelize, DataTypes);
 const Specialite = require('./specialite')(sequelize, DataTypes);
 const Artisan = require('./artisan')(sequelize, DataTypes);
 
-// On rassemble les modèles dans un objet
+// les modèles dans un objet
 const models = {
   Categorie,
   Specialite,
   Artisan,
 };
 
-// On boucle pour exécuter les associations (si elles existent)
+// les associations 
 Object.values(models).forEach(model => {
   if (typeof model.associate === 'function') {
     model.associate(models);

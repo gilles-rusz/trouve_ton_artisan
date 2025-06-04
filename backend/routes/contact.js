@@ -4,7 +4,7 @@ const router = express.Router();
 const { Artisan } = require("../models");
 const { body, validationResult } = require("express-validator");
 
-// Validation des données entrantes
+
 const contactValidationRules = [
   body("artisanId").isInt().withMessage("ID d'artisan invalide"),
   body("nom").trim().notEmpty().withMessage("Le nom est obligatoire"),
@@ -13,7 +13,6 @@ const contactValidationRules = [
   body("message").trim().notEmpty().withMessage("Le message est obligatoire"),
 ];
 
-// Middleware validation erreurs
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -26,16 +25,15 @@ router.post("/contact", contactValidationRules, validate, async (req, res) => {
   const { artisanId, nom, email, objet, message } = req.body;
 
   try {
-    // Vérifier que l'artisan existe et possède une adresse mail
     const artisan = await Artisan.findByPk(artisanId);
     if (!artisan) return res.status(404).json({ error: "Artisan non trouvé" });
     if (!artisan.email) return res.status(400).json({ error: "Artisan sans adresse email" });
 
-    // Création du transporteur SMTP - utiliser variables d'environnement
+    
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT) || 587,
-      secure: process.env.SMTP_SECURE === "true", // true pour port 465, false pour 587
+      secure: process.env.SMTP_SECURE === "true", 
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
@@ -48,7 +46,6 @@ router.post("/contact", contactValidationRules, validate, async (req, res) => {
       to: artisan.email,
       subject: objet,
       text: message,
-      // Optionnel: replyTo pour que l'artisan puisse répondre directement à l'expéditeur
       replyTo: email,
     });
 

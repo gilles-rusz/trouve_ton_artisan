@@ -75,9 +75,9 @@ const FicheArtisan = () => {
       <Header />
 
 
-      
+      <div className="mt-8 mb-16 p-6 max-w-3xl mx-auto bg-white rounded shadow space-y-6">
 
-      <div className="p-6 max-w-3xl mx-auto bg-white rounded shadow space-y-6">
+
         <div className="text-center">
           <img
             src={"../artisan-default.png"}

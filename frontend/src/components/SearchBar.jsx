@@ -7,7 +7,7 @@ const SearchBar = ({ artisans }) => {
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    // Cherche un artisan dont le nom correspond exactement (ou partiellement) au searchTerm
+    
     const found = artisans.find(artisan =>
       artisan.nom.toLowerCase() === searchTerm.toLowerCase()
     );
@@ -18,7 +18,7 @@ const SearchBar = ({ artisans }) => {
     }
   };
 
-  // Option : gérer la touche "Enter"
+  
   const onKeyDown = (e) => {
     if (e.key === 'Enter') {
       handleSearch();
