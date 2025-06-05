@@ -9,11 +9,26 @@ const specialiteRoutes = require('./routes/specialite');
 
 
 
+const cors = require('cors');
+
+const allowedOrigins = [
+  'http://localhost:5173', // ton frontend local
+  'https://trouve-ton-artisan.vercel.app' // ton frontend en ligne sur Vercel
+];
+
 app.use(cors({
-  origin: 'http://localhost:5173', // autorise ton frontend
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
+
 
 app.use(express.json());
 
