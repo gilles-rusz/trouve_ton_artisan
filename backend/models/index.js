@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes, Op } = require('sequelize');
 
 // Connexion à la base MySQL
-const sequelize = new Sequelize('trouve_ton_artisan', 'root', '', {
+const sequelize = new Sequelize('trouve-ton-artisan', 'root', '', {
   host: 'localhost',
   dialect: 'mysql',
   logging: false,
