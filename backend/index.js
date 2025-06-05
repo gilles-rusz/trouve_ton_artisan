@@ -2,40 +2,51 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 5000;
-const { sequelize, Categorie, Specialite, Artisan } = require('./models');
+const { sequelize, Categorie, Specialite, Artisan, Sequelize } = require('./models');
 const artisanRoutes = require('./routes/artisanRoutes'); 
-const categorie = require('./routes/categorie');
+const categorieRoutes = require('./routes/categorie');
 const specialiteRoutes = require('./routes/specialite');
 
+const { Op } = Sequelize;
 
 const allowedOrigins = [
   'http://localhost:5173', 
-  'https://trouve-ton-artisan.vercel.app' 
+  'https://trouve-ton-artisan.vercel.app',
+  'https://trouve-ton-artisan-p3az.vercel.app'
 ];
 
-app.use(cors({
+app.use((req, res, next) => {
+  console.log(`Requête ${req.method} vers ${req.path} avec origine: ${req.headers.origin}`);
+  next();
+});
+
+const corsOptions = {
   origin: function (origin, callback) {
+    console.log('Requête CORS origine:', origin);
     if (!origin || allowedOrigins.includes(origin)) {
-       console.log('Requête CORS origine:', origin);
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
-}));
+};
 
+// Gestion des requêtes preflight OPTIONS
+app.options('*', cors(corsOptions));
+
+// Middleware CORS
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
 app.use('/api/artisans', artisanRoutes);
-app.use('/api/categories', categorie);
+app.use('/api/categories', categorieRoutes);
 app.use('/api/specialites', specialiteRoutes);
 
 // Test connexion à la base
-
 sequelize.authenticate()
   .then(() => console.log('Connexion à la DB réussie'))
   .catch(err => console.error('Erreur de connexion DB:', err));
@@ -44,9 +55,8 @@ sequelize.sync({ alter: true })
   .then(() => console.log('Modèles synchronisés'))
   .catch(err => console.error('Erreur synchronisation:', err));
 
-// Route pour récupérer toutes les catégories avec leurs spécialités
-
-app.get('/categories', async (req, res) => {
+// Routes internes (optionnel si déjà dans artisanRoutes)
+app.get('/api/categories', async (req, res) => {
   try {
     const categories = await Categorie.findAll({
       include: [{ model: Specialite, as: 'specialites' }]
@@ -57,15 +67,14 @@ app.get('/categories', async (req, res) => {
   }
 });
 
-
-app.get('/artisans', async (req, res) => {
+app.get('/api/artisans', async (req, res) => {
   try {
     const { categorie, specialite, recherche } = req.query;
     let whereSpecialite = {};
     let whereArtisan = {};
 
     if (recherche) {
-      whereArtisan.nom = { [sequelize.Op.like]: `%${recherche}%` };
+      whereArtisan.nom = { [Op.like]: `%${recherche}%` };
     }
 
     if (specialite) {
@@ -73,7 +82,6 @@ app.get('/artisans', async (req, res) => {
     }
 
     if (categorie) {
-  
       whereSpecialite.categorieId = categorie;
     }
 
@@ -94,9 +102,7 @@ app.get('/artisans', async (req, res) => {
   }
 });
 
-// Route pour un artisan par ID
-
-app.get('/artisans/:id', async (req, res) => {
+app.get('/api/artisans/:id', async (req, res) => {
   try {
     const artisan = await Artisan.findByPk(req.params.id, {
       include: [{
@@ -112,11 +118,17 @@ app.get('/artisans/:id', async (req, res) => {
   }
 });
 
-
 app.get('/api/hello', (req, res) => {
   res.json({ message: 'API en ligne' });
 });
 
+app.use((err, req, res, next) => {
+  if (err.message === 'Not allowed by CORS') {
+    res.status(403).json({ error: err.message });
+  } else {
+    next(err);
+  }
+});
 
 app.listen(port, () => {
   console.log(`API démarrée sur http://localhost:${port}`);
