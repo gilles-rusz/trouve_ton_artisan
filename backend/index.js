@@ -8,12 +8,9 @@ const categorie = require('./routes/categorie');
 const specialiteRoutes = require('./routes/specialite');
 
 
-
-const cors = require('cors');
-
 const allowedOrigins = [
-  'http://localhost:5173', // ton frontend local
-  'https://trouve-ton-artisan.vercel.app' // ton frontend en ligne sur Vercel
+  'http://localhost:5173', 
+  'https://trouve-ton-artisan.vercel.app' 
 ];
 
 app.use(cors({
