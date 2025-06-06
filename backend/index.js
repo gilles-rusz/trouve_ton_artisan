@@ -10,10 +10,10 @@ const specialiteRoutes = require('./routes/specialite');
 const { Op } = Sequelize;
 
 const allowedOrigins = [
-  'http://localhost:5173', 
-  'https://trouve-ton-artisan.vercel.app',
-  'https://trouve-ton-artisan-p3az.vercel.app'
+  'https://trouve-ton-artisan-xls3.vercel.app/',
+  'http://localhost:5173'
 ];
+
 
 app.use((req, res, next) => {
   console.log(`Requête ${req.method} vers ${req.path} avec origine: ${req.headers.origin}`);
@@ -38,9 +38,10 @@ const corsOptions = {
 app.options('*', cors(corsOptions));
 
 // Middleware CORS
+app.use(express.json());
 app.use(cors(corsOptions));
 
-app.use(express.json());
+
 
 app.use('/api/artisans', artisanRoutes);
 app.use('/api/categories', categorieRoutes);
@@ -55,7 +56,7 @@ sequelize.sync({ alter: true })
   .then(() => console.log('Modèles synchronisés'))
   .catch(err => console.error('Erreur synchronisation:', err));
 
-// Routes internes (optionnel si déjà dans artisanRoutes)
+
 app.get('/api/categories', async (req, res) => {
   try {
     const categories = await Categorie.findAll({

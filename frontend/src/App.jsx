@@ -17,7 +17,7 @@ function App() {
   const [message, setMessage] = useState("Chargement...");
 
   useEffect(() => {
-    const API_URL = import.meta.env.VITE_API_URL || 'https://trouve-ton-artisan-1-32i6.onrender.com/api';
+    const API_URL = import.meta.env.VITE_API_URL || 'https://trouve-ton-artisan-1-v7wi.onrender.com';
 
     fetch(`${API_URL}/hello`)
       .then((res) => {

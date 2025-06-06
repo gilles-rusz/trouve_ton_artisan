@@ -47,9 +47,9 @@ app.get('/api/test', (req, res) => {
 
 // routes API
 app.use('/api/artisans', artisanRoutes);
-//app.use('/api/specialites', specialiteRoutes);
-//app.use('/api', contactRoutes); 
-//app.use('/api/categories', categorieRoutes);
+app.use('/api/specialites', specialiteRoutes);
+app.use('/api', contactRoutes); 
+app.use('/api/categories', categorieRoutes);
 
 app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
 
