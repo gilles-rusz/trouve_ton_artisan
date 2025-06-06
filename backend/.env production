@@ -1,0 +1,6 @@
+DB_NAME=trouve-ton-artisan
+DB_USER=artisan_user
+DB_PASSWORD=Z1xu3hSW26LR5TxeKpAQl8eE8eOSG1Jx
+DB_HOST=dpg-d10k8t3ipnbc738tp5u0-a
+DB_PORT=5432
+

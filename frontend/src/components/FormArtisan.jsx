@@ -26,7 +26,7 @@ const ContactForm = ({ artisanEmail }) => {
       setStatus('Message envoyé avec succès !');
       setFormData({ nom: '', email: '', objet: '', message: '' });
     } catch (err) {
-      setStatus('Erreur lors de l’envoi. Merci de réessayer plus tard.');
+      setStatus("Erreur lors de l'envoi. Merci de réessayer plus tard.");
     }
   };
 

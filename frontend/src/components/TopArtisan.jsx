@@ -5,7 +5,7 @@ export default function TopArtisans() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/artisans/top') // adapte selon ton endpoint réel
+    fetch('/api/artisans/top') 
       .then(res => res.json())
       .then(data => {
         setArtisans(data);

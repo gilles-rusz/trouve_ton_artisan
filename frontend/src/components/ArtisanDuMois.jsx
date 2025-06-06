@@ -16,7 +16,6 @@ const renderStars = (note) => {
 };
 
 const ArtisanDuMois = ({ artisans }) => {
-  // Si pas de données, fallback statique
   const artisansToDisplay = artisans && artisans.length > 0
     ? artisans.slice(0, 3)
     : [

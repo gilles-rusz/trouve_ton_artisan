@@ -1,4 +1,5 @@
 const express = require('express');
+const { Op } = require('sequelize');
 const router = express.Router();
 const { Categorie, Specialite } = require('../models');
 const { body, validationResult } = require('express-validator');
@@ -71,7 +72,8 @@ router.put('/:id', categorieValidationRules, validate, async (req, res) => {
     if (!categorie) return res.status(404).json({ message: 'Catégorie non trouvée' });
 
     
-    const exist = await Categorie.findOne({ where: { nom, id: { [Categorie.sequelize.Op.ne]: req.params.id } } });
+    const exist = await Categorie.findOne({ where: { nom, id: { [Op.ne]: req.params.id } } });
+
     if (exist) return res.status(400).json({ message: 'Cette catégorie existe déjà' });
 
     categorie.nom = nom;
